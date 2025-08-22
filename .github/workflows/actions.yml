@@ -12,6 +12,11 @@ jobs:
       issues: write
     steps:
 
+      - uses: actions/checkout@master
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
       - name: checkout repo content
         uses: actions/checkout@v2 # checkout the repository content
 
@@ -30,15 +35,20 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/script.py
 
-      - name: commit files
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -A
-          git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
-
-      - name: push changes
-        uses: ad-m/github-push-action@v0.6.0
+      - name: Commit & Push changes
+        uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main 
+      
+#      - name: commit files
+#        run: |
+#          git config --local user.email "action@github.com"
+#          git config --local user.name "GitHub Action"
+#          git add -A
+#          git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)#
+#
+#      - name: push changes
+#        uses: ad-m/github-push-action@v0.6.0
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          branch: main 
